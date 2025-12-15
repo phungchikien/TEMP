@@ -1,27 +1,62 @@
-## Mô tả
-
-Repo gồm nhiều file bash shell mô tả nhiều vector tấn công DoS khác nhau. Mỗi script sẽ sử dụng một nhân CPU để chạy vì vậy hãy tính toán số thiết bị cần sử dụng tùy thuộc vào số lượng vector mà bạn muốn triển khai và quy mô mà bạn mong muốn. Vì những script này được tạo ra với mục đích học tập nên các kỹ thuật như giả mạo địa chỉ nguồn sẽ không được áp dụng.
-
-## Các bước cài đặt
-
-1. Tạo 1 file có đuôi .sh và copy nội dung script của tôi vào.
-2. Cấp quyền thực thi cho file đó. Ví dụ: file tên temp.sh, mở terminal và dùng lệnh
-”chmod +x temp.sh”
-3. Chạy file với option -h, - -help hoặc help, sẽ hiện ra hướng dẫn sử dụng chi tiết tùy theo script, thường thì chỉ cần cài đặt các công cụ mà script yêu cầu, sẽ được ghi chi tiết trong từng script khác nhau.
-
-## Luồng hoạt động và giải thích chi tiết công cụ
-
-Công cụ sử dụng các tool được chạy bằng CLI, nên tôi sử dụng ngôn ngữ Bash để tối ưu tốc độ gọi câu lệnh, để đáp ứng được nhu cầu tính toán số học chính xác thì tôi sẽ kết hợp Python để tính toán.
-
-Luồng hoạt động của công cụ:
-
-1. Phân tích tham số đầu vào, các tham số như: địa chỉ IP mục tiêu, giao diện mạng sử dụng (đối với máy có nhiều card mạng), khoảng thời gian chạy công cụ, hệ số nén thời gian và cuối cùng là lựa chọn chế độ.
-2. Kiểm tra xem đã cài đặt đủ các công cụ yêu cầu chưa, đã chạy công cụ bằng quyền admin chưa, đồng thời kiểm tra xem card mạng mà người dùng nhập có tồn tại không.
-3.  Kiểm tra Python 3 đã được cài đặt chưa, nếu chưa thì có Python dự phòng chưa, nếu không có python thì sẽ tính toán bằng Bash calculator - kém chính xác hơn.
-4. Tạo một file python động để tính toán các công thức toán học một cách chính xác - tạm gọi là máy tính python hoặc python calculator trong hướng dẫn này, bao gồm cả bắt chước hành vi theo giờ của con người và các pattern phổ biến trong DoS. File này được tạo khi chạy công cụ, file này chỉ là file được lưu trữ tạm thời trên đường dẫn temp, sẽ bị xóa ngay khi reboot, 
-5. Kiểm tra kết nối bằng cách Ping đến target để kiểm tra xem có kết nối được đến target hay không.
-6. Tùy theo chế độ người dùng chọn, chạy hàm khởi tạo lưu lượng theo mô hình đã chọn.
-    1. Khời tạo TC QDisc với bộ lọc Token Bucket.
-    2. Chạy lệnh hping3 hoặc siege, slowloris tùy thuộc vào loại kịch bản người dùng chạy. Các công cụ này sẽ chạy liên tục trong nền. 
-    3. Vòng lặp chính, sẽ cập nhật TC rate theo mốc thời gian đã được tính bằng python calculator, vì TC QDisc chỉ có thể kiểm soát lưu lượng băng thông mạng từ đó đưa ra quyết định drop gói tin dư thừa, vì vậy toàn bộ số lượng packet sẽ được quy đổi thành băng thông và cập nhật lại TC rate. Lưu lượng và mốc thời gian, lượng packet sẽ được in ra màn hình và ghi vào file log chi tiết.
-    4. Sau khi kết thúc thời gian chạy hoặc người dùng can thiệp làm dừng công cụ, sẽ xóa file máy tính python và clean hết các process mà công cụ đang chạy, tránh sai lệch về kết quả chạy lần sau và tràn bộ nhớ đệm.
+"aggregated","2025-12-15T08:55:00+00:00",60.0,1.2833333333333334
+"aggregated","2025-12-15T08:56:00+00:00",60.0,74.51666666666667
+"aggregated","2025-12-15T08:57:00+00:00",60.0,77.55
+"aggregated","2025-12-15T08:58:00+00:00",60.0,77.56666666666666
+"aggregated","2025-12-15T08:59:00+00:00",60.0,76.25
+"aggregated","2025-12-15T09:00:00+00:00",60.0,76.8
+"aggregated","2025-12-15T09:01:00+00:00",60.0,77.25000000000001
+"aggregated","2025-12-15T09:02:00+00:00",60.0,-602.0833333333333
+"aggregated","2025-12-15T09:03:00+00:00",60.0,164.63333333333335
+"aggregated","2025-12-15T09:04:00+00:00",60.0,154.0
+"aggregated","2025-12-15T09:05:00+00:00",60.0,122.56666666666666
+"aggregated","2025-12-15T09:06:00+00:00",60.0,96.73333333333332
+"aggregated","2025-12-15T09:07:00+00:00",60.0,96.21666666666667
+"aggregated","2025-12-15T09:08:00+00:00",60.0,97.18333333333334
+"aggregated","2025-12-15T09:09:00+00:00",60.0,105.23333333333333
+"aggregated","2025-12-15T09:10:00+00:00",60.0,95.95
+"aggregated","2025-12-15T09:11:00+00:00",60.0,10.183333333333335
+"aggregated","2025-12-15T09:12:00+00:00",60.0,5.916666666666667
+"aggregated","2025-12-15T09:13:00+00:00",60.0,6.000000000000001
+"aggregated","2025-12-15T09:14:00+00:00",60.0,6.1000000000000005
+"aggregated","2025-12-15T09:15:00+00:00",60.0,5.866666666666666
+"aggregated","2025-12-15T09:16:00+00:00",60.0,5.9833333333333325
+"aggregated","2025-12-15T09:17:00+00:00",60.0,7.166666666666667
+"aggregated","2025-12-15T09:18:00+00:00",60.0,-994.1166666666668
+"aggregated","2025-12-15T09:19:00+00:00",60.0,98.93333333333332
+"aggregated","2025-12-15T09:20:00+00:00",60.0,45.31666666666666
+"aggregated","2025-12-15T09:21:00+00:00",60.0,5.25
+"aggregated","2025-12-15T09:22:00+00:00",60.0,5.2
+"aggregated","2025-12-15T09:23:00+00:00",60.0,5.216666666666667
+"aggregated","2025-12-15T09:24:00+00:00",60.0,5.300000000000001
+"aggregated","2025-12-15T09:25:00+00:00",60.0,5.183333333333333
+"aggregated","2025-12-15T09:26:00+00:00",60.0,72.96666666666667
+"aggregated","2025-12-15T09:27:00+00:00",60.0,76.8
+"aggregated","2025-12-15T09:28:00+00:00",60.0,76.98333333333332
+"aggregated","2025-12-15T09:29:00+00:00",60.0,77.01666666666667
+"aggregated","2025-12-15T09:30:00+00:00",60.0,76.61666666666666
+"aggregated","2025-12-15T09:31:00+00:00",60.0,77.60000000000001
+"aggregated","2025-12-15T09:32:00+00:00",60.0,76.73333333333333
+"aggregated","2025-12-15T09:33:00+00:00",60.0,76.56666666666666
+"aggregated","2025-12-15T09:34:00+00:00",60.0,-765.9666666666667
+"aggregated","2025-12-15T09:35:00+00:00",60.0,164.83333333333334
+"aggregated","2025-12-15T09:36:00+00:00",60.0,154.76666666666668
+"aggregated","2025-12-15T09:37:00+00:00",60.0,127.13333333333334
+"aggregated","2025-12-15T09:38:00+00:00",60.0,98.0
+"aggregated","2025-12-15T09:39:00+00:00",60.0,105.83333333333333
+"aggregated","2025-12-15T09:40:00+00:00",60.0,98.48333333333333
+"aggregated","2025-12-15T09:41:00+00:00",60.0,12.366666666666665
+"aggregated","2025-12-15T09:42:00+00:00",60.0,6.333333333333332
+"aggregated","2025-12-15T09:43:00+00:00",60.0,6.233333333333333
+"aggregated","2025-12-15T09:44:00+00:00",60.0,6.3
+"aggregated","2025-12-15T09:45:00+00:00",60.0,6.316666666666666
+"aggregated","2025-12-15T09:46:00+00:00",60.0,6.366666666666666
+"aggregated","2025-12-15T09:47:00+00:00",60.0,6.333333333333332
+"aggregated","2025-12-15T09:48:00+00:00",60.0,6.133333333333334
+"aggregated","2025-12-15T09:49:00+00:00",60.0,7.016666666666667
+"aggregated","2025-12-15T09:50:00+00:00",60.0,-827.3166666666666
+"aggregated","2025-12-15T09:51:00+00:00",60.0,98.93333333333332
+"aggregated","2025-12-15T09:52:00+00:00",60.0,45.9
+"aggregated","2025-12-15T09:53:00+00:00",60.0,5.466666666666666
+"aggregated","2025-12-15T09:54:00+00:00",60.0,5.383333333333333
+"aggregated","2025-12-15T09:55:00+00:00",60.0,5.416666666666667
+"aggregated","2025-12-15T09:56:00+00:00",60.0,1.7500000000000002
